@@ -1,4 +1,6 @@
-$(function initializeMap (){
+$(
+
+  function initializeMap (){
 
   var fullstackAcademy = new google.maps.LatLng(40.705086, -74.009151);
 
@@ -56,8 +58,65 @@ $(function initializeMap (){
     marker.setMap(currentMap);
   }
 
-  drawMarker('hotel', [40.705137, -74.007624]);
-  drawMarker('restaurant', [40.705137, -74.013940]);
-  drawMarker('activity', [40.716291, -73.995315]);
+  // drawMarker('hotel', [40.705137, -74.007624]);
+  // drawMarker('restaurant', [40.705137, -74.013940]);
+  // drawMarker('activity', [40.716291, -73.995315]);
+$( document ).ready(function() {
+    
 
+    hotels.forEach(function(hotel){
+        $('#hotel-choices').append('<option>'+hotel.name+'</option>');
+    });
+
+    activities.forEach(function(activity){
+        $('#activity-choices').append('<option>'+activity.name+'</option>');
+    });
+
+    restaurants.forEach(function(restaurant){
+        $('#restaurant-choices').append('<option>'+restaurant.name+'</option>');
+    });
+
+    $("button[data-action='add']").on('click',function(){
+
+      var type=$(this).prev().data('type');
+      var value=$(this).prev().val();
+      var location;
+
+      var itenaryItem='<div class="itinerary-item">'+
+                '<span class="title">'+value+'</span>'+
+                '<button class="btn btn-xs btn-danger remove btn-circle">x</button>'+
+              '</div>';
+
+
+
+      switch(type){
+        case 'hotel':
+          location=hotels.filter(function(hotel){
+              return hotel.name==value;
+          })[0].place.location;
+          $($('#itinerary .list-group')[0]).append(itenaryItem);
+
+        break;
+        case 'restaurant':
+         location=restaurants.filter(function(restaurant){
+              return restaurant.name==value;
+          })[0].place.location;
+          $($('#itinerary .list-group')[1]).append(itenaryItem);
+        break;
+        case 'activity':
+         location=activities.filter(function(activity){
+              return activity.name==value;
+          })[0].place.location;
+          $($('#itinerary .list-group')[2]).append(itenaryItem);
+        break;
+        default:
+
+      }
+     // marker.setMap(null);
+     
+      drawMarker(type, location);
+
+    });
+
+});
 });
