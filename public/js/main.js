@@ -62,22 +62,22 @@ $(
     marker.setMap(currentMap);
   }
 
-  function removeMarker (type, coords) {
-    console.log('called');
-    var latLng = google.maps.LatLng(coords[0], coords[1]);
-    var iconURL = iconURLs[type];
-    var marker = new google.maps.Marker({
-      icon: iconURL,
-      position: latLng
-    });
-    for(var i = 0; i < gMarkers.length; i ++){
-      console.log(gMarkers[i]==marker);
-      if(marker == gMarkers[i]){
-        console.log('in if in for');
-        gMarkers[i].setMap(null);
-      }
-    }
-  }
+  // function removeMarker (type, coords) {
+  //   console.log('called');
+  //   var latLng = google.maps.LatLng(coords[0], coords[1]);
+  //   var iconURL = iconURLs[type];
+  //   var marker = new google.maps.Marker({
+  //     icon: iconURL,
+  //     position: latLng
+  //   });
+  //   for(var i = 0; i < gMarkers.length; i ++){
+  //     console.log(gMarkers[i]==marker);
+  //     if(marker == gMarkers[i]){
+  //       console.log('in if in for');
+  //       gMarkers[i].setMap(null);
+  //     }
+  //   }
+  // }
 
   // drawMarker('hotel', [40.705137, -74.007624]);
   // drawMarker('restaurant', [40.705137, -74.013940]);
@@ -95,6 +95,11 @@ $(
           $('#restaurant-choices').append('<option>'+restaurant.name+'</option>');
       });
 
+       $(document).delegate("#itinerary .itinerary-item button",'click',function(){
+        $(this).parent().empty();
+        // removeMarker(type, location);
+      });
+
       $("button[data-action='add']").on('click',function(){
         var type=$(this).prev().data('type');
         var value=$(this).prev().val();
@@ -108,10 +113,12 @@ $(
             location=hotels.filter(function(hotel){
                 return hotel.name==value;
             })[0].place.location;
-            if($($('#itinerary .list-group')[0]).children().length != 0)
-              break;
+            //if($($('#itinerary .list-group')[0]).children().length != 0)
+             // break;
             $($('#itinerary .list-group')[0]).append(itenaryItem);
-
+            // $("#itinerary .itinerary-item button").on('click',function(){
+            //   $(this).parent().empty();
+            // });
           break;
           case 'restaurant':
            location=restaurants.filter(function(restaurant){
@@ -128,17 +135,7 @@ $(
           default:
         }
         drawMarker(type, location);
-        removeMarker(type,location);
-      $("#itinerary .itinerary-item button").on('click',function(){
-        // console.log($(this).prev().val());
-        var type='hotel';
-        console.log(type);
-        location = hotels.filter(function(hotel){
-            return hotel.name==value;
-          })[0].place.location;
-        $(this).parent().empty();
-        removeMarker(type, location);
-      });
+     
     });
   });
 });
